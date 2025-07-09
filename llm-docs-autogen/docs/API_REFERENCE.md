@@ -1,0 +1,1 @@
+No hay endpoints definidos en el código proporcionado. El archivo parece ser un aplicación de Spring Boot que inicia un servidor y configura la aplicación mediante el uso de annotations como `@SpringBootApplication` y `@SpringApplication`. Sin embargo, no se definen endpoints específicos para manejar solicitudes HTTP.

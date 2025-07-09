@@ -1,0 +1,7 @@
+El sistema tiene una estructura orientada a capas, donde el núcleo es un aplicación web construida sobre Spring Boot. La aplicación se organiza en diferentes módulos o paquetes que se comunican entre sí.
+
+La aplicación comienza con la clase principal `MeatMarketApplication` que extiende de la clase `SpringBootApplication`. Esta clase se utiliza para inicializar el contenedor de Spring y configurar las propiedades básicas de la aplicación. La función principal de esta clase es invocar al método `run` de la clase `SpringApplication`, pasando como parámetro la clase que representa la aplicación, en este caso, `MeatMarketApplication`.
+
+La clase `SpringApplication` se encarga de iniciar el contenedor de Spring y configurar las diferentes capas de la aplicación. En este caso, la capa de negocio es la responsable de manejar la lógica del sistema, mientras que la capa de presentación se encarga de mostrar la información al usuario.
+
+En resumen, la arquitectura general del sistema consiste en una estructura orientada a capas, donde el núcleo es un aplicación web construida sobre Spring Boot. La aplicación se organiza en diferentes módulos o paquetes que se comunican entre sí para proporcionar una funcionalidad completa.
