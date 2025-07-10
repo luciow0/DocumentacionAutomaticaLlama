@@ -1,45 +1,50 @@
 from llama_index.core import SimpleDirectoryReader, VectorStoreIndex, Settings
 from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from llama_index.core.schema import Document
 import os
 
-# 👉 1. Usar modelo Ollama (LLaMA 3)
+# 1. Configurar LLM y embeddings
 llm = Ollama(model="llama3", request_timeout=120.0)
-
-# 👉 2. Configurar embeddings locales de HuggingFace
-Settings.llm = llm  # también aseguramos que el LLM se use globalmente
+Settings.llm = llm
 Settings.embed_model = HuggingFaceEmbedding(model_name="all-MiniLM-L6-v2")
 
-# 👉 3. Leer código fuente del proyecto
+# 2. Ruta raíz
 source_path = "src/main/java/com/martelli/meatmarket/controller"
-docs = SimpleDirectoryReader(source_path).load_data()
+os.makedirs("pruebas", exist_ok=True)
 
-# 👉 4. Indexar el contenido con embeddings locales
-index = VectorStoreIndex.from_documents(docs)
+# 3. Recorrer recursivamente y procesar cada archivo
+for ruta_actual, _, archivos in os.walk(source_path):
+    for archivo in archivos:
+        ruta_completa = os.path.join(ruta_actual, archivo)
 
-# 👉 5. Motor de consulta a la IA
-query_engine = index.as_query_engine()
+        # Leer archivo como documento de texto
+        with open(ruta_completa, "r", encoding="utf-8") as f:
+            contenido = f.read()
+        
+        nombre_carpeta = os.path.basename(ruta_actual)  # nombre de la carpeta contenedora
+        documento = Document(text=contenido, metadata={"filename": archivo, "folder": nombre_carpeta})
 
-# 👉 6. Prompts para generar cada archivo de documentación
-#questions = {
-#    "docs/README.md": "Generá un README general para este proyecto backend con Spring Boot en castellano.",
-#    "docs/API_REFERENCE.md": "Documentá todos los endpoints definidos en este backend en castellano.",
-#    "docs/ARCHITECTURE.md": "Explicá la arquitectura general del sistema y cómo se conectan los módulos en castellano.",
-#    "docs/DATABASE.md": "Describí las entidades principales, sus campos y relaciones en castellano.",
-#}
+        # Crear índice por archivo
+        index = VectorStoreIndex.from_documents([documento])
+        query_engine = index.as_query_engine()
 
-questions = {
-    "docs/controllers.md": "primero ponle un titulo a lo que estas generando con el nomnbre del archivo que estas analizando, luego genera una descripcion detallada de cada controlador de este backend en springboot, tambien indica que podria mejorarse, en castellano.",
-}
+        # Prompt personalizado con nombre de archivo
+        prompt = f"""
+        Primero poné un título a lo que estás generando, incluyendo el nombre del archivo que estás analizando
+        ({archivo}) y la carpeta en la que se encuentra ({nombre_carpeta}).
+        Luego, generá una descripción detallada de cada controlador de este backend en Spring Boot.
+        También indicá qué podría mejorarse, y que posibles problemas de seguridad podria presentar. En castellano.
+        """
 
-# 👉 7. Crear carpeta `docs` si no existe
-os.makedirs("docs", exist_ok=True)
+        # Nombre del archivo Markdown de salida
+        nombre_salida = f"pruebas/{archivo}.md"
+        print(f"📝 Generando {nombre_salida}...")
 
-# 👉 8. Ejecutar cada pregunta y guardar el resultado como Markdown
-for file, prompt in questions.items():
-    print(f"📝 Generando {file}...")
-    response = query_engine.query(prompt)
-    with open(file, "w", encoding="utf-8") as f:
-        f.write(response.response)
+        response = query_engine.query(prompt)
+
+        # Guardar resultado
+        with open(nombre_salida, "w", encoding="utf-8") as f:
+            f.write(response.response)
 
 print("✅ ¡Documentación generada exitosamente!")

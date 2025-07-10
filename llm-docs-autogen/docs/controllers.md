@@ -1,24 +1,36 @@
-El controller "AuthController" es el responsable de manejar las solicitudes relacionadas con la autenticación y registro de usuarios. A continuación, se presentará una descripción detallada de cada método y algunas sugerencias para su mejora:
+**Título:** Autentificación y Registro - AuthController.java
 
-**register**: Este método permite al usuario registrar un nuevo cuenta. Recibe un objeto "RegisterRequest" que contiene los datos del usuario (nombre, apellido, email, contraseña y rol) y devuelve un objeto "RegisterResponse" con un token de autenticación si el registro es exitoso.
+La clase `AuthController` es el responsable de manejar las solicitudes relacionadas con la autenticación y registro de usuarios en el sistema. A continuación, se detallan los métodos de esta clase y se identifican oportunidades de mejora.
 
-Mejoras posibles:
+**Método `/register`:**
 
-* Agregar validaciones adicionales para asegurarse de que los campos no estén vacíos o sean válidos.
-* Considerar utilizar un patrón de diseño como "Command Pattern" para encapsular la lógica de negocio en una clase separada y mejorar la legibilidad del código.
+Este método se encarga de registrar un nuevo usuario en el sistema. Recibe una solicitud `RegisterRequest` con la información del usuario (nombre, apellido, email, password y rol) y realiza los siguientes pasos:
 
-**login**: Este método permite al usuario iniciar sesión con sus credenciales. Recibe un objeto "LoginRequest" que contiene el email y contraseña del usuario, y devuelve un objeto "LoginResponse" con un token de autenticación si las credenciales son válidas.
+1. Verifica si el email ya está registrado en el sistema. Si lo es, devuelve un error 400 (Bad Request).
+2. Crea un nuevo objeto `Usuario` con la información proporcionada.
+3. Guarda el usuario en la base de datos utilizando el repositorio `UsuarioRepository`.
+4. Genera un token JWT para el nuevo usuario utilizando el servicio `JwtUtil`.
+5. Devuelve una respuesta `RegisterResponse` con el token, nombre del usuario, email y rol.
 
-Mejoras posibles:
+**Oportunidad de mejora:** Considerar agregar validación adicional para asegurarse de que la password sea lo suficientemente fuerte antes de guardarlo en la base de datos.
 
-* Agregar validaciones adicionales para asegurarse de que el email y contraseña sean válidos.
-* Considerar utilizar un patrón de diseño como "Single Responsibility Principle" para separar la lógica de autenticación en una clase separada y mejorar la legibilidad del código.
+**Método `/login`:**
 
-**me**: Este método permite al usuario obtener su información actual. Recibe un objeto "HttpServletRequest" que contiene el atributo "usuarioActual", y devuelve un objeto "LoginResponse" con la información del usuario.
+Este método se encarga de autenticar a un usuario ya registrado en el sistema. Recibe una solicitud `LoginRequest` con la información del usuario (email y password) y realiza los siguientes pasos:
 
-Mejoras posibles:
+1. Busca al usuario en la base de datos utilizando el repositorio `UsuarioRepository`.
+2. Verifica si el usuario existe y está activo. Si no es así, devuelve un error 403 (Forbidden).
+3. Verifica que la password proporcionada sea válida mediante el servicio `PasswordEncoder`. Si no lo es, devuelve un error 401 (Unauthorized).
+4. Genera un token JWT para el usuario utilizando el servicio `JwtUtil`.
+5. Devuelve una respuesta `LoginResponse` con el token y la información del usuario.
 
-* Agregar validaciones adicionales para asegurarse de que el usuario esté autenticado.
-* Considerar utilizar un patrón de diseño como "Facade Pattern" para encapsular la lógica de negocio en una clase separada y mejorar la legibilidad del código.
+**Oportunidad de mejora:** Considerar agregar logueo de sesión expira al token JWT para que los usuarios se deslogueen automáticamente después de un período de inactividad.
 
-En general, el controller "AuthController" parece ser funcionalmente correcto, pero podría beneficiarse de algunas mejoras para agilizar su desarrollo y mantenimiento.
+**Método `/me`:**
+
+Este método se encarga de devolver la información del usuario actualmente autenticado. Recibe una solicitud `HttpServletRequest` y realiza los siguientes pasos:
+
+1. Busca al usuario actual en el atributo `request.getAttribute("usuarioActual")`.
+2. Devuelve una respuesta `LoginResponse` con la información del usuario.
+
+**Oportunidad de mejora:** Considerar agregar validación adicional para asegurarse de que el usuario actualmente autenticado tenga permisos adecuados para acceder a esta información.
