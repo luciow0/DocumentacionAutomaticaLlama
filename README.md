@@ -1,36 +1,57 @@
-REQUISITOS PREVIOS: 
+## REQUISITOS PREVIOS
 
-1. Python instalado (Idealmente Python 3.9+)
-2. Que pip este funcionando, probalo con el siguiente comando (Windows, Linux, MacOS): 
+1. Tener **Python** instalado (idealmente Python 3.9 o superior).
+2. Que **`pip`** esté funcionando. Probalo con el siguiente comando (Windows, Linux, MacOS):
 
--> python -m pip --version
+   ```bash
+   python -m pip --version
+   ```
 
-Para poder correr el script de forma local, segui los siguientes pasos:
+---
 
-1. Instala Ollama: 
+## Para poder correr el script de forma local, seguí los siguientes pasos:
 
-(Windows)
--> https://ollama.com/
+### 1. Instalá **Ollama**
 
-(MacOS (Si usas brew))
--> brew install ollama
+* **Windows**
+  [https://ollama.com/](https://ollama.com/)
 
-(Linux (Debian/Ubuntu))
--> curl -fsSL https://ollama.com/install.sh | sh
+* **MacOS** (si usás `brew`)
 
-2. Luego, corre el siguiente comando por consola (Windows, Linux, MacOS): 
+  ```bash
+  brew install ollama
+  ```
 
--> ollama run llama3
+* **Linux** (Debian/Ubuntu)
 
-En caso de que no tengas llama3 instalado, lo descarga, si ya lo tenes, solamente lo va a ejecutar. 
+  ```bash
+  curl -fsSL https://ollama.com/install.sh | sh
+  ```
 
-3. Vas a necesitar estas dependencias para correr el script: 
+---
 
--> llama-index
--> llama-index-llms-ollama
--> llama-index-embeddings-huggingface
--> sentence-transformers
+### 2. Ejecutá el siguiente comando en consola (Windows, Linux, MacOS):
+
+```bash
+ollama run llama3
+```
+
+> En caso de que no tengas `llama3` instalado, lo descarga automáticamente.
+> Si ya lo tenés, solamente lo va a ejecutar.
+
+---
+
+### 3. Instalá las siguientes dependencias:
+
+* `llama-index`
+* `llama-index-llms-ollama`
+* `llama-index-embeddings-huggingface`
+* `sentence-transformers`
 
 Instalalas con el siguiente comando (Windows, Linux, MacOS):
 
--> pip install llama-index llama-index-llms-ollama llama-index-embeddings-huggingface sentence-transformers
+```bash
+pip install llama-index llama-index-llms-ollama llama-index-embeddings-huggingface sentence-transformers
+```
+
+---
