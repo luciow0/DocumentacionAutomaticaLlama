@@ -3,6 +3,9 @@ from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.core.schema import Document
 import os
+import time 
+
+start_time = time.time()
 
 # 1. Configurar LLM y embeddings
 llm = Ollama(model="llama3", request_timeout=120.0)
@@ -48,3 +51,5 @@ for ruta_actual, _, archivos in os.walk(source_path):
             f.write(response.response)
 
 print("✅ ¡Documentación generada exitosamente!")
+print(f"⏱️ Tiempo total de ejecución: {time.time() - start_time:.2f} segundos")
+
