@@ -12,6 +12,18 @@ llm = Ollama(model="llama3", request_timeout=120.0)
 Settings.llm = llm
 Settings.embed_model = HuggingFaceEmbedding(model_name="all-MiniLM-L6-v2")
 
+
+#################################################################################
+# TO DO 
+#print("Bienvenido, que accion desea realizar? ")
+#print("1. Generar documentacion tecnica de cada clase de un paquete especifico y una descripcion general, evidenciando posibles mejoras y potenciales problemas de seguridad ") 
+#print("2. Generar una descripcion general acerca del proyecto completo, con el objetivo de entender como los modulos se conectan entre si, evidenciando posibles cuellos de botella, perdidas de rendimiento y uso excesivo de recursos")
+#print("3. Analisis de mantenibilidad. Generar un reporte completo del proyecto, con foco en la mantenibilidad del codigo y su potencial de escalabilidad")
+
+
+#################################################################################
+
+
 print("* Ingrese la ruta ABSOLUTA de el paquete que desea documentar")
 print("* Asegurese de pegar la ruta correcta, en caso de notar que la ruta especificada no es correcta")
 print("* ya habiendo empezado la ejecucion, presione 'Ctrl + C' para detener el programa ")
@@ -48,7 +60,7 @@ for ruta_actual, _, archivos in os.walk(source_path):
         prompt = f"""
         Primero poné un título a lo que estás generando, incluyendo el nombre del archivo que estás analizando
         ({archivo}) y la carpeta en la que se encuentra ({nombre_carpeta}) y la fecha y hora de generación ({fecha_hora_actual}).
-        Luego, generá una descripción detallada de cada controlador de este backend en Spring Boot.
+        Luego, generá una descripción detallada de cada clase de este backend en Spring Boot.
         También indicá qué podría mejorarse, y que posibles problemas de seguridad podria presentar. En castellano.
         """
 
